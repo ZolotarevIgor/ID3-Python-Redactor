@@ -6,7 +6,7 @@ fpath = f'{getcwd()}/*.mp3'
 files = glob.glob(fpath)
 
 for fname in files:
-    if fname.find('?') != -1:
+    if fname.find('_') != -1:
         print(f'Error in file {fname}')
         continue
     name_list = fname.split('-')
@@ -15,8 +15,12 @@ for fname in files:
         continue
     artist, song_name = name_list
     tag = EasyID3(fname)
-    if not tag['artist']: 
+    try:
+        tag['artist']
+    except KeyError:
         tag['artist'] = artist
-    if not tag['title']: 
+    try:
+        tag['title']
+    except KeyError: 
         tag['title'] = song_name
     tag.save(v2_version=3)
